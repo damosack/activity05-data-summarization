@@ -26,7 +26,7 @@ Compare this code output to the `load_data` chunk in your knitted Activity 4 `.m
 What does enclosing an assignment code (i.e., `object_name <- r_code`) in parentheses do?
 
 **Response**:
-
+Enclosing the assignment code in parentheses tells R to print out the data.
 
 ### Data Codebook
 
@@ -79,6 +79,12 @@ There are a number of ways to create a code chunk:
 Below, create a code chunk and name it `median_earnings`.
 Make sure there is an empty line above and below the code chunk.
 
+```{r median_earnings}
+
+college_recent_grads %>% 
+  summarize(median_all_majors = median(median))
+
+```
 
 
 In your newly created R code chunk, verify that the median income for all majors was $36,000.
@@ -95,13 +101,25 @@ Be careful when you name your output summaries as we are dealing with things tha
 When I and obtaining numerical summaries for variables, I like to include the variable name in my summary name (e.g., `mean_med_earnings = mean(median)`).
 Create a code chunk and name it `summary_earnings`.
 
+```{r summary_earnings}
+
+college_recent_grads %>%
+ 
+  summarize(n_med_earnings = n(), 
+             avg_med_earnings = mean(median), 
+             std_med_earnings = sd(median), 
+             min_med_earnings = min(median), 
+             median_med_earnings = median(median), 
+             max_med_earnings = max(median))
+
+```
 
 
 Provide a discussion on what you believe the distribution of median earnings will look like.
 You should discuss the center, spread, and potential shape only using these values - I do NOT want to see any data visualizations here.
 
-**Response**:
-
+**Response**: 
+My guess is that the center of the distribution will sit at a mean of 40,151.45, with a minimum value of 22,000 and a maximum of 110,000. I believe that the distribution will have a distinct right skew. 
 
 ### Median Earnings by Major Category
 
@@ -110,6 +128,20 @@ Using the `college_recent_grads` dataset and functions from `{dplyr}`, obtain si
 *Arrange* this summary table by the median earning.
 Create a code chunk and name it `major_earnings`.
 
+```{r major_earnings}
+
+college_recent_grads %>% 
+  group_by(major_category)%>%
+  summarize(n_med_earnings = n(), 
+             avg_med_earnings = mean(median), 
+             std_med_earnings = sd(median), 
+             min_med_earnings = min(median), 
+             median_med_earnings = median(median), 
+             max_med_earnings = max(median)) %>%
+
+  arrange(desc(median_med_earnings))
+
+```
 
 
 Provide a discussion on how each major compares to the overall distribution.

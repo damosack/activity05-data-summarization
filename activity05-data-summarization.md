@@ -48,7 +48,8 @@ Compare this code output to the `load_data` chunk in your knitted
 Activity 4 `.md` report. What does enclosing an assignment code (i.e.,
 `object_name <- r_code`) in parentheses do?
 
-**Response**:
+**Response**: Enclosing the assignment code in parentheses tells R to
+print out the data.
 
 ### Data Codebook
 
@@ -107,6 +108,16 @@ chunks. Have no fear! There are a number of ways to create a code chunk:
 Below, create a code chunk and name it `median_earnings`. Make sure
 there is an empty line above and below the code chunk.
 
+``` r
+college_recent_grads %>% 
+  summarize(median_all_majors = median(median))
+```
+
+    ## # A tibble: 1 x 1
+    ##   median_all_majors
+    ##               <dbl>
+    ## 1             36000
+
 In your newly created R code chunk, verify that the median income for
 all majors was $36,000. Using the `college_recent_grads` dataset and
 functions from `{dplyr}`, verify the *median* summary statistic for the
@@ -130,12 +141,32 @@ summaries for variables, I like to include the variable name in my
 summary name (e.g., `mean_med_earnings = mean(median)`). Create a code
 chunk and name it `summary_earnings`.
 
+``` r
+college_recent_grads %>%
+ 
+  summarize(n_med_earnings = n(), 
+             avg_med_earnings = mean(median), 
+             std_med_earnings = sd(median), 
+             min_med_earnings = min(median), 
+             median_med_earnings = median(median), 
+             max_med_earnings = max(median))
+```
+
+    ## # A tibble: 1 x 6
+    ##   n_med_earnings avg_med_earnings std_med_earnings min_med_earnings
+    ##            <int>            <dbl>            <dbl>            <dbl>
+    ## 1            173           40151.           11470.            22000
+    ## # … with 2 more variables: median_med_earnings <dbl>, max_med_earnings <dbl>
+
 Provide a discussion on what you believe the distribution of median
 earnings will look like. You should discuss the center, spread, and
 potential shape only using these values - I do NOT want to see any data
 visualizations here.
 
-**Response**:
+**Response**: My guess is that the center of the distribution will sit
+at a mean of 40,151.45, with a minimum value of 22,000 and a maximum of
+110,000. I believe that the distribution will have a distinct right
+skew.
 
 ### Median Earnings by Major Category
 
@@ -146,6 +177,41 @@ similar summaries of the variable `median` earnings of full-time,
 year-round workers as your `summary_earnings` code chunk, *by* for each
 `major_category`. *Arrange* this summary table by the median earning.
 Create a code chunk and name it `major_earnings`.
+
+``` r
+college_recent_grads %>% 
+  group_by(major_category)%>%
+  summarize(n_med_earnings = n(), 
+             avg_med_earnings = mean(median), 
+             std_med_earnings = sd(median), 
+             min_med_earnings = min(median), 
+             median_med_earnings = median(median), 
+             max_med_earnings = max(median)) %>%
+
+  arrange(desc(median_med_earnings))
+```
+
+    ## # A tibble: 16 x 7
+    ##    major_category               n_med_earnings avg_med_earnings std_med_earnings
+    ##    <chr>                                 <int>            <dbl>            <dbl>
+    ##  1 Engineering                              29           57383.           13626.
+    ##  2 Computers & Mathematics                  11           42745.            5109.
+    ##  3 Business                                 13           43538.            7774.
+    ##  4 Physical Sciences                        10           41890             8252.
+    ##  5 Social Science                            9           37344.            4751.
+    ##  6 Biology & Life Science                   14           36421.            4529.
+    ##  7 Law & Public Policy                       5           42200             9066.
+    ##  8 Agriculture & Natural Resou…             10           36900             6935.
+    ##  9 Communications & Journalism               4           34500             1000 
+    ## 10 Health                                   12           36825             5776.
+    ## 11 Industrial Arts & Consumer …              7           36343.            7291.
+    ## 12 Interdisciplinary                         1           35000               NA 
+    ## 13 Education                                16           32350             3893.
+    ## 14 Humanities & Liberal Arts                15           31913.            3393.
+    ## 15 Arts                                      8           33062.            7223.
+    ## 16 Psychology & Social Work                  9           30100             5382.
+    ## # … with 3 more variables: min_med_earnings <dbl>, median_med_earnings <dbl>,
+    ## #   max_med_earnings <dbl>
 
 Provide a discussion on how each major compares to the overall
 distribution. You should discuss the center, spread, and potential shape
